@@ -1,0 +1,7 @@
+postgres:
+  host: "localhost"
+  name: "postgres"
+  user: "postgres"
+  password: "ozon"
+  port: "5435"
+  sslmode: "disable"

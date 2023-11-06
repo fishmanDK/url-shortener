@@ -8,10 +8,11 @@ import (
 
 
 type DB struct {
-    dbInterface
+    DbInterface
 }
 
-type dbInterface interface {
+//go:generate go run github.com/vektra/mockery/v2@v2.20.2 --name=dbInterface
+type DbInterface interface {
 	GetUrl(aliasUrl string) (string, error)
     SaveUrl(urlToSave, aliasUrl string) error
     IsDublicate(alias string) bool
@@ -19,7 +20,7 @@ type dbInterface interface {
 
 func NewDB(name string) (*DB, error) {
     var (
-		db dbInterface
+		db DbInterface
 		err error
 	)
 
@@ -35,6 +36,6 @@ func NewDB(name string) (*DB, error) {
     }
 
     return &DB{
-        dbInterface: db,
+        DbInterface: db,
     }, err
 }

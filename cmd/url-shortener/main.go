@@ -2,11 +2,14 @@ package main
 
 import (
 	"log/slog"
+	"net/http"
 	"os"
 	"test-ozon/config"
 	"test-ozon/internal/http-server/handlers"
-	"test-ozon/internal/service/api"
+	"test-ozon/internal/service"
 	"test-ozon/internal/storage"
+
+	"github.com/gin-gonic/gin"
 )
 
 const (
@@ -18,9 +21,7 @@ const (
 )
 
 func main() {
-
 	cfg := config.NewLocalConfig()
-
 	logger := setupLogger(cfg.Env)
 
 	storage, err := storage.NewDB(dbPostgres)
@@ -28,13 +29,22 @@ func main() {
 		logger.Debug(err.Error())
 		return
 	}
-	service := api.NewServiceApi(storage)
+	service := service.NewService(storage)
 	handlers := handlers.NewHandlers(service)
+	routs := handlers.InitRouts(logger)
 
-	server := handlers.InitRouts(logger)
+	server := InitServer(cfg, routs)
 
-	// server.ListenAndServe()
-	server.Run(cfg.Server.Address)
+	server.ListenAndServe()
+}
+
+func InitServer(cfg *config.LocalConfig, routs *gin.Engine) *http.Server{
+	return &http.Server{
+		Addr:         ":8080",
+        Handler:      routs,
+        ReadTimeout:  cfg.Server.ReadTimeout,
+		WriteTimeout: cfg.Server.WriteTimeout,
+	}
 }
 
 func setupLogger(env string) *slog.Logger{

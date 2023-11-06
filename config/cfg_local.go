@@ -3,14 +3,17 @@ package config
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type LocalConfig struct {
-	Env string `yaml:"env" env-default:"develop"`
-	Server struct{
-		Address string `yaml:"address"`
+	Env    string `yaml:"env" env-default:"develop"`
+	Server struct {
+		Address      string        `yaml:"address"`
+		ReadTimeout  time.Duration `yaml:"readTimeout" env-default:"3s"`
+		WriteTimeout time.Duration `yaml:"writeTimeout" env-default:"3s"`
 	} `yaml:""`
 }
 

@@ -3,17 +3,17 @@ package handlers
 import (
 	"log/slog"
 	"test-ozon/internal/http-server/middleware"
-	"test-ozon/internal/service/api"
-
+	"test-ozon/internal/service"
 	"github.com/gin-contrib/requestid"
 	"github.com/gin-gonic/gin"
 )
 
+
 type Handlers struct{
-	Service *api.ServiceApi
+	Service *service.Service
 }
 
-func NewHandlers(service *api.ServiceApi) *Handlers {
+func NewHandlers(service *service.Service) *Handlers {
 	return &Handlers{
 		Service: service,
 	}

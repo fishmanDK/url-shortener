@@ -3,5 +3,5 @@ postgres:
   name: "postgres"
   user: "postgres"
   password: "ozon"
-  port: "5435"
+  port: "5432"
   sslmode: "disable"
